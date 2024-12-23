@@ -1,0 +1,9 @@
+[build]
+
+rustflags = ["--sysroot=changeit"]
+target = "../deps/incubator-teaclave-sgx-sdk/rustlib/x86_64-unknown-linux-sgx.json"
+#target = "x86_64-unknown-linux-gnu.json"
+
+[env]
+SGX_SDK = "/opt/intel/sgxsdk"
+#RUSTUP_TOOLCHAIN = "nightly-2023-11-17-x86_64-unknown-linux-gnu"

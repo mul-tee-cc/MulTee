@@ -1,0 +1,19 @@
+[package]
+name = "mbedtls-sys"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[dependencies]
+
+[build-dependencies]
+bindgen = { version = "0.69.5",default-features = false, features = ["logging", "prettyplease", "runtime"] }
+cc = "1"
+
+[features]
+multee_sgx = []
+# suppresses use of RdRand, as it's sometimes disabled on Dev VMs by policy
+multee_devm = []

@@ -1,0 +1,124 @@
+/* multee.edl - Top EDL file. */
+
+enclave {
+  from "sgx_tstd.edl" import *;
+  from "sgx_backtrace.edl" import *;
+  from "sgx_stdio.edl" import *;
+  from "sgx_env.edl" import *;
+  from "sgx_fs.edl" import *;
+  from "sgx_net.edl" import *;
+  from "sgx_time.edl" import *;
+  from "sgx_tstdc.edl" import *;
+  from "sgx_pthread.edl" import *;
+
+  include "sgx_quote.h"
+  include "sgx_quote_3.h"
+  include "sgx_ql_lib_common.h"
+
+/* ***************** TODO ***********
+  ecalls should return value(long) indicating problems with err_buf, including err_buf pointing into enclave!
+*/
+
+
+  trusted {
+
+    public void ecall_import_keys([user_check] const void *key_repo_end_point_ptr,
+                                               size_t key_repo_end_point_len,
+                                  [user_check] const void *key_literal,
+                                               size_t key_literal_len,
+                                  [user_check] char* rust_log_env,
+                                               size_t rust_log_env_len,
+                                  [user_check] void *err_buf);
+
+    public void ecall_mk_csr([user_check] const char *sn,
+                                          size_t sn_len,
+                                          uint8_t pinned,
+                             [user_check] uint8_t *csr,
+                             [user_check] size_t *csr_len,
+                             [user_check] uint8_t *pkey,
+                             [user_check] size_t *pkey_len,
+                             [user_check] void *err_buf);
+
+    public void ecall_hmac_sha256( size_t key_index,
+                      [user_check] const uint8_t *input,
+                                   size_t input_len,
+                      [user_check] uint8_t *output,
+                      [user_check] void *err_buf) transition_using_threads;
+
+    public void ecall_crypt_cbc( size_t key_index,
+                                 size_t encrypt,
+                                 size_t explicit_iv,
+                    [user_check] uint8_t *iv,
+                    [user_check] uint8_t *crypto_buf,
+                                 size_t input_len,
+                    [user_check] void *err_buf);
+
+    public void ecall_crypt_gcm(size_t key_index,
+                                size_t encrypt,
+                                [user_check] const uint8_t *iv,
+                                [user_check] const uint8_t *aad,
+                                             size_t aad_len,
+                                [user_check] uint8_t *input_buf,
+                                [user_check] uint8_t *output_buf,
+                                             size_t input_len,
+                                [user_check] uint8_t *tag,
+                                [user_check] void *err_buf);
+
+
+    public void ecall_sign( size_t   key_index,
+               [user_check] uint8_t* plaintext,
+                            size_t   plaintext_len,
+               [user_check] void*    padding,
+                            uint32_t md_type,
+               [user_check] uint8_t* signature,
+               [user_check] size_t*  signature_len,
+               [user_check] void*    err_buf);
+
+    public void ecall_get_public_key( size_t   key_index,
+                         [user_check] uint8_t* public_key,
+                         [user_check] size_t*  public_key_len,
+                         [user_check] void*    err_buf);
+
+    public void ecall_meta_key_len( size_t key_index,
+                       [user_check] uint64_t *buf,
+                       [user_check] void *err_buf);
+
+    public void ecall_meta_key_type( size_t key_index,
+                        [user_check] uint32_t *buf,
+                        [user_check] void *err_buf);
+
+    public void ecall_meta_key_usage( size_t key_index,
+                        [user_check] uint32_t *buf,
+                        [user_check] void *err_buf);
+
+    public void ecall_meta_key_count(
+                        [user_check] uint64_t *buf,
+                        [user_check] void *err_buf);
+
+    public void ecall_meta_key_name( size_t key_index,
+                         [user_check] uint8_t* key_name,
+                         [user_check] size_t*  key_name_len,
+                         [user_check] void *err_buf);
+
+    public void ecall_seal_pk([user_check] uint8_t *pem,
+                                           size_t in_len,
+                              [user_check] uint8_t *sealed,
+                              [user_check] size_t *out_len,
+                              [user_check] void *err_buf);
+
+//    public void ecall_dummy( size_t key_index,
+//                [user_check] char *dummy,
+//                [user_check] void *err_buf);
+
+  };
+
+  untrusted {
+    quote3_error_t ocall_qe_get_quote_size(  [out] uint32_t *p_quote_size );
+    quote3_error_t ocall_qe_get_target_info( [out] sgx_target_info_t *p_qe_target_info );
+    quote3_error_t ocall_qe_get_quote(
+        [in]                    sgx_report_t *p_app_report,
+                                uint32_t quote_size,
+        [out,size = quote_size] uint8_t *quote_vec
+    );
+  };
+};

@@ -1,0 +1,33 @@
+@startuml
+autonumber
+box "Application" #LightGray
+participant "Business logic" as App
+participant "MulTee Lib" as MulTee
+end box
+participant "KMS" as kms
+participant "Triple-A Service" as triple_a
+database "MulTee Policy" as policy
+
+App -> MulTee ++ : loadKeys(keyNames,app-identity)
+MulTee -// MulTee : geterateAttestationReport()
+MulTee -// triple_a ++ : init()
+return nonce
+MulTee -// triple_a ++ : getGrant(nonce,app-identity,report)
+triple_a -// triple_a : Attest TEE using report
+triple_a -// triple_a : Authenticate application\nusing its identity
+triple_a -// policy ++ : "Fetch policy"
+return policy
+triple_a -// triple_a : "Evaluate policy"
+return grant
+note right
+Grant can have many forms
+depending on KMS:
+Certificate, JWT, etc
+end note
+MulTee -// kms ++ : exportKey(keyNames,grant)
+return keyMaterial
+return keyHandles
+App -> MulTee ++: useKey(keyHandle,data)
+MulTee -> MulTee: process()
+return processed data
+@enduml

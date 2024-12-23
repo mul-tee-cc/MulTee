@@ -1,0 +1,20 @@
+[package]
+name = "multee-cgo"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+
+[build-dependencies]
+common = { path = "../common" }
+
+[dependencies]
+multee-lib = { path = "../multee-lib" }
+common = { path = "../common" }
+kmip = { path = "../kmip" }
+multee-core = { path = "../multee-core" }

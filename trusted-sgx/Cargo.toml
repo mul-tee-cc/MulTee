@@ -1,0 +1,40 @@
+[package]
+name = "trusted-sgx"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+
+[features]
+default = []
+multee_sgx  = ["multee-core/multee_sgx"]
+multee_devm = ["multee-core/multee_devm"]
+
+[dependencies]
+common = { path = "../common" }
+multee-core = { path = "../multee-core"}
+kmip = { path = "../kmip" }
+
+either = { version = "1.13.0", default-features = false }
+lazycell = "1.3.0"
+
+postcard = {  version = "=1.0.10", default-features = false, features = ["alloc"] }
+
+sgx_tseal = { path = "../deps/incubator-teaclave-sgx-sdk/sgx_tseal" }
+sgx_tse = { path = "../deps/incubator-teaclave-sgx-sdk/sgx_tse" }
+
+#sgx_trts = { path = "../deps/incubator-teaclave-sgx-sdk/sgx_trts",features = ["sim","thread"] }
+#sgx_types = { path = "../deps/incubator-teaclave-sgx-sdk/sgx_types",features = ["sim"] }
+
+env_logger = { version = "=0.10.0", default-features = false }
+log = "0.4.22"
+
+[patch.crates-io]
+bytes = { package = "bytes", path = "../deps/bytes" } # http depends on it
+ring = { package = "ring", path = "../deps/incubator-teaclave-crates-9ca099c/ring" } # rustls depends on it
+

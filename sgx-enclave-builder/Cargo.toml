@@ -1,0 +1,11 @@
+[package]
+name = "enclave-builder"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2018"
+
+[dependencies]
+cc = "1"

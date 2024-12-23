@@ -1,0 +1,33 @@
+[package]
+name = "multee-server"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[dependencies]
+
+kmip = { path = "../kmip" }
+common = { path = "../common" }
+multee-lib = { path = "../multee-lib" }
+
+anyhow = "1.0.94"
+clap = "2.32.0"
+
+tokio-rustls = "=0.24.1"
+tokio-util = { version = "=0.7.8", features = ["codec"] }
+tokio = { version = "1.20.5", features = ["full"] }
+tokio-task-pool = { version = "0.1.5" }
+rustls-pemfile = "=1.0.2"
+log = "0.4.22"
+env_logger = "0.11.5"
+tokio-stream = "0.1.17"
+atomic-counter = "1.0.1"
+
+#combine = "4.6.6"
+
+#[profile.release]
+#debug = true
+

@@ -1,0 +1,3 @@
+#[repositories]
+#  local
+#  maven-proxy: 	https://artifacts.multee.cc/artifactory/maven-all/

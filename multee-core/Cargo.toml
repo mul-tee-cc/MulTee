@@ -1,0 +1,40 @@
+[package]
+name = "multee-core"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[dependencies]
+common = { path = "../common" }
+kmip = { path = "../kmip" }
+mbedtls-sys = { path = "../mbedtls-sys" }
+#mbedtls-sys2 = { package = "mbedtls-sys", version = "", default-features = false, features = ["aesni","force_aesni_support"] }
+
+paste = "=1.0.15"
+
+const_format = "=0.2.30"
+either = { version = "1.13.0", default-features = false }
+
+num-traits = { version = "0.2", default-features = false }
+
+base64 = { version = "0.11", default-features = false, features = ["alloc"] }
+serde_json =  { version = "=1.0.94", default-features = false, features = ["alloc"] }
+
+rustls = { version = "=0.17.0", features = ["dangerous_configuration"] }
+
+webpki = { version = "=0.21.2" }
+
+http = { version = "=1.0.0" }
+log = "0.4.22"
+
+[features]
+default = []
+multee_sgx = ["mbedtls-sys/multee_sgx"] #,"rustls/logging"
+multee_devm = ["mbedtls-sys/multee_devm"] #,"rustls/logging"
+
+
+
+## rustup component add --toolchain nightly rustfmt-preview

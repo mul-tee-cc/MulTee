@@ -1,0 +1,18 @@
+@startuml
+[KMS] as kms
+component "KMS" as kms {
+}
+component "MulTee Triple-A service"  as triple_a {
+}
+folder "Nginx" {
+    component "OpenSSL" as tls
+    component "MulTee PKCS#11 Module" as pkcs11 {
+        [MulTee Lib] as multee
+    }
+}
+
+Listen -d-> tls
+tls -> pkcs11
+multee <-d- kms
+multee --> triple_a
+@enduml

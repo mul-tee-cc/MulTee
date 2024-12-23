@@ -1,0 +1,12 @@
+@startuml
+package  Application {
+file "Business logic" as app
+file "MulTee Lib" as multee_lib
+}
+[MulTee Triple-A service] as triple_a
+[KMS (AWS, Vault, HSM, etc)] as kms
+
+app -r-> multee_lib
+multee_lib --> triple_a: attestation
+multee_lib <-- kms: key export
+@enduml

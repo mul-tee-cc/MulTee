@@ -1,0 +1,14 @@
+[package]
+name = "common"
+version = "0.7.0"
+authors = [
+    "Authors <authors@multee.cc>",
+    "gwlwZ4NLuNe0tEjOVIec7H/KUa8DBHvUQSuodN3pB7Y="
+]
+edition = "2021"
+
+[dependencies]
+strum = { version = "=0.24.1", default-features = false }
+strum_macros = "=0.24.3"
+kmip = { path = "../kmip" }
+serde = { version = "1.0.215", default-features = false, features = ["derive","alloc"] }

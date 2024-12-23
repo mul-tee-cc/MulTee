@@ -1,0 +1,8 @@
+[build]
+
+[target.x86_64-unknown-linux-gnu]
+# TODO consider removing this link option. See discussion here: https://bugs.launchpad.net/ubuntu/+source/glibc/+bug/1737608
+#  The flag --disable-new-dtags sets the RPATH to the current directory for all dependencies and overrides LD_LIBRARY_PATH settings
+#  The *new* standard behavior is RUNPATH which only searches for direct (non-transitive) deps in the current directory
+#  Given that this is a dynmaic link environment I believe we should just rely on LD_LIBRARY_PATH moving forward
+rustflags = ["-C", "link-args=-Wl,--disable-new-dtags,-rpath,$ORIGIN"]

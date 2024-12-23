@@ -1,0 +1,20 @@
+@startuml
+package  Application {
+file "Business logic" as app
+file "MulTee Lib" as multee_lib2
+}
+package  "MulTee Remote\n(Confidential VM, or\ndedicated SGX host, or\nTPM attested host)" as "MUU" {
+package  "MulTee Server" as multee_server {
+file "TCP Server" as tcp_server
+file "MulTee Lib" as multee_lib
+}
+}
+[MulTee Triple-A service] as triple_a
+[KMS (AWS, Vault, HSM, etc)] as kms
+
+app -r-> multee_lib2
+multee_lib2 --> tcp_server
+tcp_server -r-> multee_lib
+multee_lib --> triple_a: attestation
+multee_lib <-- kms: key export
+@enduml
