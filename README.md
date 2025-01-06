@@ -30,6 +30,7 @@
     * [PyKMIP](#pykmip)
     * [Samples](#samples)
 * [Testing](#testing)
+    * [Tests extracted from _conveyance-self-test.bats_](#tests-extracted-from-_conveyance-self-testbats_)
 * [Performance](#performance-)
     * [Throughput](#throughput)
     * [Latency](#latency)
@@ -43,6 +44,7 @@
 * [MulTee Lite](#multee-lite)
 * [Application credentials package (ZIP file)](#application-credentials-package-zip-file)
 * [Security of Triple-A Service](#security-of-triple-a-service)
+* [Crypto- abstraction and development ergonomics](#crypto--abstraction-and-development-ergonomics)
 * [Secret Caching and Credentials Pinning](#secret-caching-and-credentials-pinning)
 * [Key Use Policy aks Triple-A Policy](#key-use-policy-aks-triple-a-policy)
 * [Higher Level Policy Layer (HLPL)](#higher-level-policy-layer-hlpl)
@@ -237,8 +239,17 @@ CoVM (Intel TDX, AMD SEV-SNP) over TCP/IP or Unix socket
 
 # Comparison
 
-SGX came up in millions end-user devices.
-Access to SEV/TDX requires effort
+Intel SGX is the original widely available technology. Although it has seen its share of
+micro-architectural side-channel attacks, it still, arguably, aged well. Majority of problems 
+were fixed with microcode and SW update. Number of reports filed against it is greater than
+reports against competing technologies, but that's not a good gauge to measure relative security.
+SGX came at least 6 years before AMD SEV-SNP and Intel TDX, and, unlike them, it was instantly
+reachable by security researchers.
+
+SGX is fundamentally more light-weight, as it doesn't require at least two OS kernels loaded 
+into memory.
+
+SGX, also, has fundamentally smaller TCB.
 
 ## Comparison with LibraryOS ([Graphene/Gramine](https://github.com/gramineproject/gramine), [Occulum](https://github.com/occlum/occlum),[SCONE](https://sconedocs.github.io/),[Fortanix Rust Enclave Development Platform](https://github.com/fortanix/rust-sgx))
 
@@ -497,6 +508,19 @@ I.e., Cryptographic-hash backed VCSes with signed commits, etc
 
 Triple-A Service itself can be run in TEE too.
 Procedures of bootstrapping of Triple-A Service and establishing trust between Triple-A and KMS, are outside of scope. 
+
+# Crypto- abstraction and development ergonomics
+
+One of the goals of MulTee is to provide crypto API which is easy to use and difficult to make 
+mistakes with. Average developer doesn't know what "RSA/ECB/PKCS1Padding" means, and would be better off 
+knowing that keys the application will be using will only allow algorithms approved by security team. So
+developer needs only to worry about key name (or other type of reference), and specific permitted crypto
+algorithms are managed by corresponding competent team (PKI, data protection, KMS, HSM, etc).
+
+Additionally, the library is designed to be used in exactly the same way, regardless of 
+specific KMS, particular TEE deployed in production, whether environment is development vs production, etc.
+The library can be used on platforms which don't have TEE at all. This way developers can use their MAC for
+development and have applications deployed to AMD SEV-SNP, Intel SGX or Intel TDX.
 
 # Secret Caching and Credentials Pinning
 
